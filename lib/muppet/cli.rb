@@ -74,7 +74,30 @@ module Muppet
       Dir["#{repo_dir}/policies/*.rb"].each do |file|
         Sprinkle::Script.parse file
       end
-      Sprinkle::Script.policies.each { |p| puts p.name }
+      added_policies, other_policies = [], []
+      Sprinkle::Script.policies.each do |policy|
+        if File.exists?("./muppet/policies/#{policy.name}.rb")
+          added_policies << policy
+        else
+          other_policies << policy
+        end
+      end
+      
+      puts ''
+      if added_policies.any?
+        say "Current policies", :magenta
+        added_policies.each do |policy|
+          say "  #{policy.name}", :green
+        end
+      end
+      
+      say "Available policies", :magenta
+      other_policies.each do |policy|
+        say "  #{policy.name}", :yellow
+      end
+      puts ''
+      say "Add policies with muppet add [policy name]"
+      puts ''
     end
     
     desc 'add', 'Use a policy in your app'
