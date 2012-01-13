@@ -1,5 +1,7 @@
 require 'thor'
 require 'fileutils'
+require 'sprinkle'
+
 module Muppet
 
   class CLI < Thor
@@ -66,6 +68,16 @@ module Muppet
     def update(*args)
       puts `cd #{repo_dir} && git pull`
     end
+    
+    desc 'list', 'List all available policies in policies repo'
+    def list(*args)
+      Dir["#{repo_dir}/policies/*.rb"].each do |file|
+        policy_name = File.basename(file)
+        policy = Sprinkle::Script.new
+        policy.instance_eval(File.read(file), file)
+        puts policy.packages.inspect
+      end
+    end
 
     desc 'copy_deploy_rb', 'Copy deploy.rb default template'
     def copy_deploy_rb(app_name)
@@ -78,7 +90,6 @@ module Muppet
     desc 'setup', 'Setup remote box using provided policies'
     def setup(*args)
       in_app!
-      require 'sprinkle'
       Dir["./muppet/policies/*.rb"].each do |file|
         Sprinkle::Script.sprinkle File.read(file), file
       end
