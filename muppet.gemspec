@@ -10,6 +10,8 @@ Gem::Specification.new do |gem|
   gem.homepage      = ""
 
   gem.add_dependency 'thor'
+  gem.add_dependency 'sprinkle'
+  gem.add_dependency 'i18n' # required by activesupport but not defined in deps?
   gem.add_development_dependency 'rake'
 
   gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }

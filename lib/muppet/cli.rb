@@ -75,7 +75,21 @@ module Muppet
       template 'templates/deploy.rb.tt', File.join(app_name, 'deploy.rb')
     end
     
+    desc 'setup', 'Setup remote box using provided policies'
+    def setup(*args)
+      in_app!
+      require 'sprinkle'
+      Dir["./muppet/policies/*.rb"].each do |file|
+        puts file
+      end
+      #Sprinkle::Script.sprinkle File.read(powder), powder
+    end
+    
     protected
+    
+    def in_app!
+      File.exists?('./muppet') or raise "Not in a muppet app! Create one with muppet init app_name or cd into it"
+    end
 
     def defaults(app_name, folder_name, defaults)
       empty_directory File.join(app_name, 'muppet', folder_name)
