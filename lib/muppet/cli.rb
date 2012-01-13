@@ -62,6 +62,11 @@ module Muppet
       end
     end
     
+    desc 'update', 'Update repo'
+    def update(*args)
+      puts `cd #{repo_dir} && git pull`
+    end
+    
     desc 'copy_deploy_rb', 'Copy deploy.rb default template'
     def copy_deploy_rb(app_name)
       @app_name = app_name
