@@ -49,7 +49,7 @@ module Muppet
 
     desc 'configurations', 'Create default configurations'
     def configurations(app_name)
-      defaults app_name, 'conf', %w(vimrc)
+      defaults app_name, 'conf', %w(vim)
     end
 
     desc 'clone_repo', 'Clone central muppet repo'
@@ -72,9 +72,26 @@ module Muppet
     desc 'list', 'List all available policies in policies repo'
     def list(*args)
       Dir["#{repo_dir}/policies/*.rb"].each do |file|
-        Sprinkle::Script.parse File.read(file), file
+        Sprinkle::Script.parse file
       end
       Sprinkle::Script.policies.each { |p| puts p.name }
+    end
+    
+    desc 'add', 'Use a policy in your app'
+    def add(policy_name)
+      in_app!
+      Sprinkle::Script.parse(File.join(repo_dir, 'policies', "#{policy_name}.rb"))
+      policy = Sprinkle::Script.policies.first
+      say "adding packages..."
+      copy_packages policy.packages
+      
+      conf_dir = File.join(repo_dir, 'conf', policy_name)
+      if File.exists?(conf_dir)
+        FileUtils.cp_r conf_dir, './muppet/conf/'
+      end
+      
+      FileUtils.cp File.join(repo_dir, 'policies', "#{policy_name}.rb"), './muppet/policies'
+      say "Policy #{policy_name} added to local project", :yellow
     end
 
     desc 'copy_deploy_rb', 'Copy deploy.rb default template'
@@ -94,7 +111,15 @@ module Muppet
     end
 
     protected
-
+    
+    def copy_packages(packages)
+      packages.each do |pack|
+        pack_path = File.join(repo_dir, 'packages', "#{pack}.rb")
+        target_path = "./muppet/packages/#{pack}.rb"
+        FileUtils.cp(pack_path, target_path) if (File.exists?(pack_path) && !File.exists?(target_path))
+      end
+    end
+    
     def in_app!
       File.exists?('./muppet') or raise "Not in a muppet app! Create one with muppet init app_name or cd into it"
     end
@@ -102,7 +127,7 @@ module Muppet
     def defaults(app_name, folder_name, defaults)
       empty_directory File.join(app_name, 'muppet', folder_name)
       defaults.each do |pack|
-        FileUtils.cp File.join(repo_dir, folder_name, pack), File.join(app_name, 'muppet', folder_name, pack)
+        FileUtils.cp_r File.join(repo_dir, folder_name, pack), File.join(app_name, 'muppet', folder_name, pack)
       end
       say "Copied default #{folder_name} into #{File.join(app_name, folder_name)}", :green
     end
@@ -113,6 +138,14 @@ module Muppet
 
     def repo_dir
       File.join(muppet_central, 'repo')
+    end
+    
+    def copy_absolute_file(source, destination)
+      create_file destination, nil, config do
+        content = File.binread(source)
+        content = block.call(content) if block
+        content
+      end
     end
 
   end
