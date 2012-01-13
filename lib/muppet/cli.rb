@@ -10,6 +10,8 @@ module Muppet
     
     source_root File.dirname(__FILE__)
     
+    default_task :help
+    
     desc "init", "Clone the Muppet policies repository into this environment"
     def init(app_name)
       # create directory if doesn't exist
