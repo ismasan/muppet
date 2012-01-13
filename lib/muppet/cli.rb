@@ -38,6 +38,8 @@ module Muppet
     
     desc 'policies', 'Create default policies'
     def policies(app_name)
+      helper_file = File.join(app_name, 'muppet', 'recipe_helper.rb')
+      FileUtils.cp(File.join(repo_dir, 'recipe_helper.rb'), helper_file) unless File.exists?(helper_file)
       defaults app_name, 'policies', %w(utils.rb)
     end
     
