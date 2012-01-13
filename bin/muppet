@@ -1,0 +1,3 @@
+require 'muppet'
+
+Muppet::CLI.start
