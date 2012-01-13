@@ -52,9 +52,14 @@ module Muppet
     
     desc 'clone_repo', 'Clone central muppet repo'
     def clone_repo(*args)
-      empty_directory muppet_central
-      `git clone #{MUPPET_REPO} #{repo_dir}` unless Dir.exists?(repo_dir)
-      say %(Central policies repository cloned into #{repo_dir}), :green
+      if Dir.exists?(repo_dir)
+        say %(Muppet policies repository already cloned into #{repo_dir})
+      else
+        say "Cloning muppet policies repo", :yellow
+        empty_directory muppet_central
+        `git clone #{MUPPET_REPO} #{repo_dir}`
+        say %(Muppet policies repository cloned into #{repo_dir}), :green
+      end
     end
     
     desc 'copy_deploy_rb', 'Copy deploy.rb default template'
