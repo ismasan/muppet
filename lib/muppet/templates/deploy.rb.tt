@@ -1,0 +1,9 @@
+# Set the user for your remote box
+set :user, 'changeme'
+
+set :use_sudo, true
+
+default_run_options[:pty] = true # interactive terminal
+
+# your deploy configuration will probably contain more roles
+role :server, '<%= @server_ip %>', :primary => true

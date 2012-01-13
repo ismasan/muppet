@@ -8,6 +8,8 @@ module Muppet
     
     include Thor::Actions
     
+    source_root File.dirname(__FILE__)
+    
     desc "init", "Clone the Muppet policies repository into this environment"
     def init(app_name)
       # create directory if doesn't exist
@@ -21,6 +23,7 @@ module Muppet
       # create ./muppet/conf if not exist
       invoke :configurations, [app_name]
       # create deploy.rb if not exist
+      invoke :copy_deploy_rb, [app_name]
     end
     
     desc 'app_dir', 'Create app directory'
@@ -48,6 +51,14 @@ module Muppet
       empty_directory muppet_central
       `git clone #{MUPPET_REPO} #{repo_dir}` unless Dir.exists?(repo_dir)
       say %(Central policies repository cloned into #{repo_dir}), :green
+    end
+    
+    desc 'copy_deploy_rb', 'Copy deploy.rb default template'
+    def copy_deploy_rb(app_name)
+      @app_name = app_name
+      server_ip = ask("Enter your remote box's IP (or leave blank):", :yellow).chomp
+      @server_ip = server_ip == '' ? '[SERVER_IP]' : server_ip
+      template 'templates/deploy.rb.tt', File.join(app_name, 'deploy.rb')
     end
     
     protected
