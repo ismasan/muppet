@@ -1,17 +1,17 @@
 require 'thor'
 require 'fileutils'
 module Muppet
-  
+
   class CLI < Thor
-    
-    MUPPET_REPO = 'git@github.com:cloud8421/Sprinkle-provisioning-scripts'
-    
+
+    MUPPET_REPO = 'git@github.com:cloud8421/muppet-central.git'
+
     include Thor::Actions
-    
+
     source_root File.dirname(__FILE__)
-    
+
     default_task :help
-    
+
     desc "init", "Clone the Muppet policies repository into this environment"
     def init(app_name)
       # create directory if doesn't exist
