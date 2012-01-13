@@ -8,9 +8,10 @@ Gem::Specification.new do |gem|
   gem.description   = %q{Easy CLI server provisioning using Sprinkle}
   gem.summary       = %q{Easy CLI server provisioning using Sprinkle}
   gem.homepage      = ""
-  
+
   gem.add_dependency 'thor'
-  
+  gem.add_development_dependency 'rake'
+
   gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   gem.files         = `git ls-files`.split("\n")
   gem.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
