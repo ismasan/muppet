@@ -1,25 +1,32 @@
 # Muppet
 
-TODO: Write a gem description
+Easy CLI server provisioning using Sprinkle
 
 ## Installation
-
-Add this line to your application's Gemfile:
-
-    gem 'muppet'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
 
     $ gem install muppet
 
 ## Usage
 
-TODO: Write usage instructions here
+Create a new provisioning project
 
+    $ muppet init my_project
+
+List available policies
+
+    $ cd my_project
+    $ muppet list
+    
+Add a pre-defined policy to your project
+
+    $ muppet add monit
+    
+Policies and dependent packages are added to your project's 'muppet' directory. You can edit them there.
+
+Once your deploy.rb file is configured, setup your boxes with
+
+    $ muppet setup
+    
 ## Contributing
 
 1. Fork it
