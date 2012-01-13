@@ -68,15 +68,13 @@ module Muppet
     def update(*args)
       puts `cd #{repo_dir} && git pull`
     end
-    
+
     desc 'list', 'List all available policies in policies repo'
     def list(*args)
       Dir["#{repo_dir}/policies/*.rb"].each do |file|
-        policy_name = File.basename(file)
-        policy = Sprinkle::Script.new
-        policy.instance_eval(File.read(file), file)
-        puts policy.packages.inspect
+        Sprinkle::Script.parse File.read(file), file
       end
+      Sprinkle::Script.policies.each { |p| puts p.name }
     end
 
     desc 'copy_deploy_rb', 'Copy deploy.rb default template'
@@ -116,6 +114,7 @@ module Muppet
     def repo_dir
       File.join(muppet_central, 'repo')
     end
+
   end
 
 end
