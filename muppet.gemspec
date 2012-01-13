@@ -3,10 +3,10 @@ $:.push File.expand_path("../lib", __FILE__)
 require 'muppet/version'
 
 Gem::Specification.new do |gem|
-  gem.authors       = ["Ismael Celis"]
+  gem.authors       = ["Ismael Celis", "Claudio Ortolina"]
   gem.email         = ["ismaelct@gmail.com"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
+  gem.description   = %q{Easy CLI server provisioning using Sprinkle}
+  gem.summary       = %q{Easy CLI server provisioning using Sprinkle}
   gem.homepage      = ""
   
   gem.add_dependency 'thor'
