@@ -1,3 +1,4 @@
+require 'sprinkle/script'
 require "muppet/version"
 
 module Muppet
